@@ -121,7 +121,7 @@ devMiddleware.waitUntilValid(() => {
     console.log('> Listening at ' + uri + '\n')
     // when env is testing, don't need open it
     if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
-      opn(uri)
+      opn(uri, {app: 'Google Chrome'})
     }
     // 启动express服务器并监听相应的端口
     server = app.listen(port)

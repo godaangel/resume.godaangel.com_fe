@@ -1,6 +1,12 @@
 <template>
     <Form :model="formItem" :label-width="120">
       <Row>
+        <Col span="24">
+          <h3>基本信息</h3>
+          <div class="split"></div>
+        </Col>
+      </Row>
+      <Row>
         <Col span="8">
           <FormItem label="姓名">
               <Input v-model="formItem.username" placeholder="输入姓名"></Input>
@@ -60,6 +66,12 @@
               <Option value="群众">群众</Option>
             </Select>
           </FormItem>
+        </Col>
+      </Row>
+      <Row>
+        <Col span="24">
+          <h3>从业信息</h3>
+          <div class="split"></div>
         </Col>
       </Row>
       <Row>
@@ -245,15 +257,22 @@
         </Col>
       </Row>
       <FormItem>
-          <Button type="primary" @click="submit">提交</Button>
+          <Button type="primary" :loading="submiting" @click="submit">
+            <span v-if="!submiting">提交</span>
+            <span v-else>提交中...</span>
+          </Button>
           <Button type="ghost" style="margin-left: 8px">取消</Button>
       </FormItem>
     </Form>
 </template>
 <script>
+  import $ from 'jquery';
+  import axios from 'axios';
+
   export default {
     data() {
       return {
+        submiting: false,
         formItem: {
           username: '',
           sex: 'male',
@@ -269,29 +288,36 @@
           title: '',
           position: '',
           department: '',
-          program_list: [{
-            name: '测试',
-            startTime: '',
-            endTime: '',
-            position: '主管',
-            remark: '',
-            content: '项目内容'
-          }],
-          education_list: [{
-            startTime: '',
-            endTime: '',
-            school: '',
-            content: ''
-          }],
-          work_list: [{
-            startTime: '',
-            endTime: '',
-            company: '',
-            content: '',
-            position: ''
-          }]
+          program_list: [],
+          education_list: [],
+          work_list: []
         }
       }
+    },
+    mounted(){
+      let that = this;
+      axios.interceptors.request.use(function (config) {
+        // 在发送请求之前做些什么
+        // that.$Spin.show({
+        //   render: (h) => {
+        //     return h('div', [
+        //       h('Icon', {
+        //         'class': 'form-spin-icon-load',
+        //         props: {
+        //           type: 'load-c',
+        //           size: 24
+        //         }
+        //       }),
+        //       h('div', '提交中，请稍后...')
+        //     ])
+        //   }
+        // });
+        that.submiting = true;
+        return config;
+      }, function (error) {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+      });
     },
     methods: {
       addPrograme() {
@@ -331,7 +357,30 @@
         this.formItem.work_list.splice(index, 1);
       },
       submit(){
-        console.log(this.formItem);
+        let that = this;
+        let params = $.extend(true, {}, that.formItem);
+        params.program_list = JSON.stringify(params.program_list);
+        params.education_list = JSON.stringify(params.education_list);
+        params.work_list = JSON.stringify(params.work_list);
+        console.log(params);
+        axios({
+          method: 'post',
+          url: '/resume/add',
+          data: params,
+          timeout: 10000,
+        }).then(res => {
+          setTimeout(() => {
+            that.submiting = false;
+            if(res.code == 200){
+              that.$Message.success('保存成功!');
+            }else{
+              that.$Message.success('保存成功!');
+            }
+          },1000);
+        }).catch(res => {
+          that.submiting = false;
+          that.$Message.error('网络错误');
+        });
       }
     }
   }
@@ -344,5 +393,8 @@
     border-bottom: 1px solid #e5e8ef;
     margin-top: 5px;
     margin-bottom: 25px;
+  }
+  .form-spin-icon-load{
+    animation: ani-demo-spin 1s linear infinite;
   }
 </style>
