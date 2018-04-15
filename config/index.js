@@ -9,10 +9,14 @@ var proxyConf = require('./dev-proxy.js') //引入代理配置文件
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    // index: path.resolve(__dirname, '../dist/index.html'),
+    // assetsRoot: path.resolve(__dirname, '../dist'),
+    // assetsSubDirectory: 'static',
+    // assetsPublicPath: './',
+    index: path.resolve(__dirname, '../dist/views/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/public'),
+    assetsSubDirectory: 'javascripts/resume/static',
+    assetsPublicPath: '/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
