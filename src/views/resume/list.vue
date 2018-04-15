@@ -229,7 +229,7 @@ export default {
           let resData = res.data;
           this.downloadLoading = false;
           if (resData.code == 200) {
-            let newPage = window.open();
+            let newPage = window.open('_blank');
             newPage.location = `/${resData.data.url}`;
           } else {
             that.$Message.error(resData.msg);
