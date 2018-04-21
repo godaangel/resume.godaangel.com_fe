@@ -197,6 +197,7 @@ export default {
           }
         }).catch(res => {
           that.loading = false;
+          console.warn(res);
           that.$Message.error('网络错误');
         });
       },
