@@ -21,6 +21,12 @@ const ListResumeTpl = resolve => {
   })
 }
 
+const AddDataTpl = resolve => {
+  require.ensure(['../views/data/add.vue'], () => {
+    resolve(require('../views/data/add.vue'))
+  })
+}
+
 // const BlankTpl = resolve => {
 //   require.ensure(['../views/blank.vue'], () => {
 //     resolve(require('../views/blank.vue'))
@@ -53,5 +59,12 @@ export default new Router({
       breadcrumb: ['简历管理', '修改']
     },
     component: AddResumeTpl
+  }, {
+    path: '/data/add',
+    name: 'data-add',
+    meta: {
+      breadcrumb: ['资料管理', '新增']
+    },
+    component: AddDataTpl
   }]
 })

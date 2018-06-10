@@ -9,19 +9,7 @@
                 <div class="layout-nav">
                     <MenuItem name="1">
                         <Icon type="ios-navigate"></Icon>
-                        Item 1
-                    </MenuItem>
-                    <MenuItem name="2">
-                        <Icon type="ios-keypad"></Icon>
-                        Item 2
-                    </MenuItem>
-                    <MenuItem name="3">
-                        <Icon type="ios-analytics"></Icon>
-                        Item 3
-                    </MenuItem>
-                    <MenuItem name="4">
-                        <Icon type="ios-paper"></Icon>
-                        Item 4
+                        首页
                     </MenuItem>
                 </div>
             </Menu>
@@ -36,6 +24,15 @@
                         </template>
                         <MenuItem name="resume-add">新增</MenuItem>
                         <MenuItem name="resume-list">查看列表</MenuItem>
+                    </Submenu>
+                    <Submenu name="data">
+                        <template slot="title">
+                            <Icon type="ios-analytics"></Icon>
+                            资料管理
+                        </template>
+                        <MenuItem name="data-add">新增</MenuItem>
+                        <MenuItem name="data-comp">组合</MenuItem>
+                        <MenuItem name="data-list">查看列表</MenuItem>
                     </Submenu>
                     <Submenu name="2">
                         <template slot="title">
@@ -101,6 +98,7 @@ export default {
   },
   methods: {
     changeMenu(res){
+      console.log(res)
       this.$router.push({name: res})
     }
   }
