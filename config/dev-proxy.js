@@ -10,6 +10,10 @@ module.exports = {
         '/resume': {
             target: target,
             changeOrigin: true
+        },
+        '/article': {
+            target: target,
+            changeOrigin: true
         }
     }
 }

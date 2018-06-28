@@ -27,6 +27,12 @@ const AddDataTpl = resolve => {
   })
 }
 
+const ListDataTpl = resolve => {
+  require.ensure(['../views/data/list.vue'], () => {
+    resolve(require('../views/data/list.vue'))
+  })
+}
+
 // const BlankTpl = resolve => {
 //   require.ensure(['../views/blank.vue'], () => {
 //     resolve(require('../views/blank.vue'))
@@ -60,10 +66,24 @@ export default new Router({
     },
     component: AddResumeTpl
   }, {
+    path: '/data/list',
+    name: 'data-list',
+    meta: {
+      breadcrumb: ['资料管理', '资料列表']
+    },
+    component: ListDataTpl
+  }, {
     path: '/data/add',
     name: 'data-add',
     meta: {
-      breadcrumb: ['资料管理', '新增']
+      breadcrumb: ['资料管理', '新增资料']
+    },
+    component: AddDataTpl
+  }, {
+    path: '/data/edit/:id',
+    name: 'data-edit',
+    meta: {
+      breadcrumb: ['资料管理', '修改资料']
     },
     component: AddDataTpl
   }]

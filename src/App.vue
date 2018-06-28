@@ -30,9 +30,9 @@
                             <Icon type="ios-analytics"></Icon>
                             资料管理
                         </template>
-                        <MenuItem name="data-add">新增</MenuItem>
-                        <MenuItem name="data-comp">组合</MenuItem>
-                        <MenuItem name="data-list">查看列表</MenuItem>
+                        <MenuItem name="data-add">新增资料</MenuItem>
+                        <MenuItem name="data-list">查看资料列表</MenuItem>
+                        <MenuItem name="data-comp">组合文章</MenuItem>
                     </Submenu>
                     <Submenu name="2">
                         <template slot="title">

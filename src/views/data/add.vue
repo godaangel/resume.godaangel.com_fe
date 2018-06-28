@@ -1,5 +1,13 @@
 <template>
     <Form v-if="!loading" :model="formItem" :label-width="120">
+      <Row>
+        <Col span="12">
+          <FormItem label="标题">
+            <Input v-model="formItem.title" placeholder="输入标题"></Input>
+          </FormItem>
+        </Col>
+      </Row>
+      
       <Tree :data="tree" :render="renderContent"></Tree>
       <Row>
         <Col span="24">
@@ -52,23 +60,8 @@
         submiting: false,
         loading: false,
         formItem: {
-          username: '',
-          sex: 'male',
-          born: '',
-          id_card: '',
-          nation: '',
-          school: '',
-          major: '',
-          education: '',
-          degree: '',
-          political: '',
-          work_year: 0,
-          title: '',
-          position: '',
-          department: '',
-          program_list: [],
-          education_list: [],
-          work_list: []
+          content: '',
+          title: ''
         },
         showAdd: false,
         addTitle: '',
@@ -133,29 +126,15 @@
     },
     watch: {
       "$route": function(to,from){
-        // console.log(to, from);
         let that = this;
-        if(to.name == 'resume-add'){
+        if(to.name == 'data-add'){
+          that.isNew = true;
           that.formItem = {
-            username: '',
-            sex: 'male',
-            born: '',
-            id_card: '',
-            nation: '',
-            school: '',
-            major: '',
-            education: '',
-            degree: '',
-            political: '',
-            work_year: 0,
-            title: '',
-            position: '',
-            department: '',
-            program_list: [],
-            education_list: [],
-            work_list: []
-          }
-        }else if(to.name == 'resume-edit'){
+            content: '',
+            title: ''
+          };
+          that.tree[0].children = [];
+        }else if(to.name == 'data-edit'){
           that.isNew = false;
           that.getDetail(that.id);
         }
@@ -164,7 +143,7 @@
     mounted(){
       let that = this;
       axios.interceptors.request.use(function (config) {
-        if(config.url != '/resume/detail'){
+        if(config.url != '/article/info'){
           that.submiting = true;
         }
         return config;
@@ -175,6 +154,7 @@
       if(!that.isNew){
         that.getDetail(that.id);
       }
+
     },
     methods: {
       transToBr(content, h) {
@@ -193,7 +173,7 @@
         that.loading = true;
         axios({
           method: 'post',
-          url: '/resume/detail',
+          url: '/article/info',
           data: {
             id: id
           },
@@ -202,10 +182,9 @@
           that.loading = false;
           let resData = res.data;
           if(resData.code == 200){
-            resData.data.program_list = eval(resData.data.program_list)||[];
-            resData.data.education_list = eval(resData.data.education_list)||[];
-            resData.data.work_list = eval(resData.data.work_list)||[];
-            that.formItem = resData.data;
+            resData.data.content = eval(resData.data.content)||[];
+            that.tree[0].children = resData.data.content;
+            that.formItem.title = resData.data.title;
           }else{
             that.$Message.error(resData.msg);
           }
@@ -216,16 +195,21 @@
       },
       submit(){
         let that = this;
-        let params = $.extend(true, {}, that.formItem);
-        params.program_list = JSON.stringify(params.program_list);
-        params.education_list = JSON.stringify(params.education_list);
-        params.work_list = JSON.stringify(params.work_list);
-        // console.log(params);
-        // return false;
-        let url = '/resume/add';
+        console.log(JSON.stringify(that.tree[0].children))
+
+        if(!that.formItem.title){
+          that.$Message.error('标题不能为空');
+          return false;
+        }
+
+        let params = {
+          title: that.formItem.title,
+          content: JSON.stringify(that.tree[0].children)
+        }
+
+        let url = '/article/save';
         if(!that.isNew){
           params.id = that.id;
-          url = '/resume/update';
         }
 
         axios({

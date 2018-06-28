@@ -307,6 +307,7 @@
         // console.log(to, from);
         let that = this;
         if(to.name == 'resume-add'){
+          that.isNew = true;
           that.formItem = {
             username: '',
             sex: 'male',
